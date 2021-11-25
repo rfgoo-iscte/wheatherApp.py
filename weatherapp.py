@@ -10,10 +10,23 @@ import PyQt5.QtWidgets as qt
 from PyQt5.QtGui import QImage, QPixmap
 
 
-def action(loc):
+def driver_select(option):
+    print(option)
+    # TODO Message: 'operadriver' executable needs to be in PATH. Please see https://sites.google.com/a/chromium.org/chromedriver/home
+
+    #if option == "Opera":
+    #    return webdriver.Opera()
+    if option == "Safari":
+        return webdriver.Safari()
+    #elif option == "Chrome":
+    #    return webdriver.Chrome()
+    #elif option == "Firefox":  TODO Downlowad mozilla webriver
+    #    return webdriver.Firefox()
+
+def action(loc, option = "Safari"):
 
     url = "https://www.google.com"
-    driver = webdriver.Safari()
+    driver = driver_select(option)
     driver.get(url)
 
     cookies = driver.find_element_by_id("L2AGLb")
@@ -137,6 +150,7 @@ class Window(qt.QMainWindow):
 
             self.show()
 
+
         # input dialog
         def search():
             # global info
@@ -144,9 +158,11 @@ class Window(qt.QMainWindow):
             location = "tempo em " + city
 
             if done:
-                info = action(location)
 
-                labels(info)
+                driver, done2 = qt.QInputDialog.getText(self, "WeatherApp", "Please select your browser (opera, chrome, safari, Firefox):")
+                if done2:
+                    info = action(location, str(driver.capitalize()))
+                    labels(info)
 
         search()
 
